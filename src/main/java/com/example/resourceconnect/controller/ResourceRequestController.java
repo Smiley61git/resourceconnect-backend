@@ -19,7 +19,11 @@ import com.example.resourceconnect.service.ResourceRequestService;
 
 @RestController
 @RequestMapping("/api/requests")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://resourceconnect-frontend.onrender.com"
+})
 public class ResourceRequestController {
 
     private final ResourceRequestService requestService;
