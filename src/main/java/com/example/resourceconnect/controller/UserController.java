@@ -16,7 +16,11 @@ import com.example.resourceconnect.service.UserService;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "https://resourceconnect-frontend.onrender.com"
+})
 public class UserController {
 
     private final UserService userService;
@@ -27,56 +31,39 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
-
-        return ResponseEntity.ok(
-                userService.getAllUsers()
-        );
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(
-            @RequestBody User user) {
-
+    public ResponseEntity<?> registerUser(@RequestBody User user) {
         try {
-
-            User savedUser =
-                    userService.registerUser(user);
+            User savedUser = userService.registerUser(user);
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
                     .body(savedUser);
 
         } catch (Exception e) {
-
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(
-                        "Email already exists or invalid data"
-                    );
+                    .body("Email already exists or invalid data");
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(
-            @RequestBody User user) {
-
-        User loggedInUser =
-                userService.loginUser(
-                        user.getEmail(),
-                        user.getPassword()
-                );
+    public ResponseEntity<?> loginUser(@RequestBody User user) {
+        User loggedInUser = userService.loginUser(
+                user.getEmail(),
+                user.getPassword()
+        );
 
         if (loggedInUser != null) {
-
-            return ResponseEntity.ok(
-                    loggedInUser
-            );
+            return ResponseEntity.ok(loggedInUser);
         }
 
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(
-                    "Invalid email or password"
-                );
+                .body("Invalid email or password");
     }
 }
+
